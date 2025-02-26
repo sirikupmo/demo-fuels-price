@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getBasePath } from "../utils/basePath";
+import liff from "@line/liff";
 
 export default function Home() {
   const basePath = getBasePath();
