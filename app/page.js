@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import liff from "@line/liff";
 import { useEffect, useState } from "react";
 import { getBasePath } from "../utils/basePath";
-import liff from "@line/liff";
+import { fetchOilPrices } from "../utils/api";
 
 export default function Home() {
   const basePath = getBasePath();
@@ -26,6 +27,7 @@ export default function Home() {
 
     if (typeof window !== "undefined") {
       initLiff();
+      fetchOilPrices();
     }
   }, []);
 
