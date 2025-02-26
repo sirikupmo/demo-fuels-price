@@ -6,7 +6,7 @@ export default function Home() {
   useEffect(() => {
     // รอให้ SDK ถูกโหลดเสร็จแล้วทำการ initialize
     if (typeof window !== 'undefined' && window.liff) {
-      window.liff.init({ liffId: "YOUR_LIFF_ID_HERE" })
+      window.liff.init({ liffId: "2006968919-ArYdqmNG" })
         .then((result) => {
           if (window.liff.isLoggedIn()) {
             window.liff.getProfile().then(profile => {
