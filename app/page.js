@@ -10,35 +10,37 @@ export default function Home() {
   const searchParams = useSearchParams();
   const [userId, setUserId] = useState(null);
   useEffect(() => {
-    const id = searchParams.get("user_id"); // ดึง user_id จาก URL
-    if (id) {
-      setUserId(id);
-    } else {
-      if (typeof window !== "undefined") {
-        // โหลด LIFF SDK
-        import("https://static.line-scdn.net/liff/edge/versions/2.8.0/sdk.js")
+    if (typeof window !== "undefined") {
+      // สร้าง <script> element
+      const script = document.createElement("script");
+      script.src = "https://static.line-scdn.net/liff/edge/versions/2.8.0/sdk.js";
+      script.async = true;
+      script.onload = () => {
+        console.log("LIFF SDK Loaded");
+      };
+
+      document.body.appendChild(script);
+      const id = searchParams.get("user_id"); // ดึง user_id จาก URL
+      if (id) {
+        setUserId(id);
+      } else {
+        window.liff
+          .init({ liffId: "2006968919-ArYdqmNG" })
           .then(() => {
-            console.log("LIFF SDK Loaded");
-            window.liff
-              .init({ liffId: "YOUR_LIFF_ID" })
-              .then(() => {
-                console.log("LIFF Initialized");
-                if (window.liff.isLoggedIn()) {
-                  window.liff.getProfile().then(profile => {
-                    console.log("User ID:", profile.userId);
-                    // Redirect ไปยังหน้าที่ต้องการ
-                    window.location.href = `/?user_id=${profile.userId}`;
-                  });
-                } else {
-                  window.liff.login();
-                }
-              })
-              .catch(err => console.error("LIFF Init Error:", err));
+            console.log("LIFF Initialized");
+            if (window.liff.isLoggedIn()) {
+              window.liff.getProfile().then(profile => {
+                console.log("User ID:", profile);
+                // Redirect ไปที่หน้า Home พร้อม user_id
+                window.location.href = `/?user_id=${profile.userId}`;
+              });
+            } else {
+              window.liff.login();
+            }
           })
-          .catch(err => console.error("LIFF SDK Load Error:", err));
+          .catch(err => console.error("LIFF Init Error:", err));
       }
     }
-
   }, [searchParams]);
 
   return (
