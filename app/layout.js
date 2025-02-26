@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 
 const kanit = Kanit({
   variable: "--font-kanit",
+  weight: ["400", "700"], // เลือกน้ำหนัก 400 และ 700
   subsets: ["latin", "thai"],
 });
 
