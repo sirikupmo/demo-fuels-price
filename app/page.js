@@ -7,41 +7,27 @@ import { useSearchParams } from "next/navigation";
 
 export default function Home() {
   const basePath = getBasePath();
-  const searchParams = useSearchParams();
-  const [userId, setUserId] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
+  const [error, setError] = useState(null);
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      // สร้าง <script> element
-      const script = document.createElement("script");
-      script.src = "https://static.line-scdn.net/liff/edge/versions/2.8.0/sdk.js";
-      script.async = true;
-      script.onload = () => {
-        console.log("LIFF SDK Loaded");
-      };
-
-      document.body.appendChild(script);
-      const id = searchParams.get("user_id"); // ดึง user_id จาก URL
-      if (id) {
-        setUserId(id);
-      } else {
-        window.liff
-          .init({ liffId: "2006968919-ArYdqmNG" })
-          .then(() => {
-            console.log("LIFF Initialized");
-            if (window.liff.isLoggedIn()) {
-              window.liff.getProfile().then(profile => {
-                console.log("User ID:", profile);
-                // Redirect ไปที่หน้า Home พร้อม user_id
-                window.location.href = `/?user_id=${profile.userId}`;
-              });
-            } else {
-              window.liff.login();
-            }
-          })
-          .catch(err => console.error("LIFF Init Error:", err));
+    const initLiff = async () => {
+      try {
+        await liff.init({ liffId: "2006968919-ArYdqmNG" });
+        if (liff.isLoggedIn()) {
+          const profile = await liff.getProfile();
+          setUserProfile(profile);
+        } else {
+          liff.login();
+        }
+      } catch (err) {
+        setError(err.message);
       }
+    };
+
+    if (typeof window !== "undefined") {
+      initLiff();
     }
-  }, [searchParams]);
+  }, []);
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -64,7 +50,27 @@ export default function Home() {
           </li>
           <li>Save and see your changes instantly.</li>
         </ol>
+        <div className="flex gap-4 items-center flex-col sm:flex-row">
+          <h1 className="text-2xl font-bold">Welcome to LINE LIFF</h1>
 
+          {error && <p className="text-red-500">{error}</p>}
+
+          {userProfile ? (
+            <div className="mt-4 flex flex-col items-center">
+              <Image
+                src={userProfile.pictureUrl}
+                alt={userProfile.displayName}
+                width={100}
+                height={100}
+                className="rounded-full"
+              />
+              <p className="mt-2 text-lg">{userProfile.displayName}</p>
+              <p className="text-sm text-gray-500">{userProfile.statusMessage}</p>
+            </div>
+          ) : (
+            <p>Loading user profile...</p>
+          )}
+        </div>
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <a
             className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
