@@ -105,17 +105,23 @@ export default function Home() {
           >
             Read our docs
           </a>
-        </div>
-        <div className="flex flex-col items-center justify-center min-h-screen p-8">
-          <h1 className="text-2xl font-bold mb-4">กดปุ่มเพื่อเรียก API</h1>
-
-          <button
-            onClick={handleFetchData}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition disabled:bg-gray-400"
-            disabled={loading}
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault(); 
+              handleFetchData();
+            }}
+            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
           >
+            <Image
+              className="dark:invert"
+              src={`${basePath}/vercel.svg`}
+              alt="Vercel logomark"
+              width={20}
+              height={20}
+            />
             {loading ? "กำลังโหลด..." : "เรียก API"}
-          </button>
+          </a>
         </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
