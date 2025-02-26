@@ -20,12 +20,6 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Head>
-        <script
-          charset="utf-8"
-          src="https://static.line-scdn.net/liff/edge/versions/2.8.0/sdk.js"
-        />
-      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

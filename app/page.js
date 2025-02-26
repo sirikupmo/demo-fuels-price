@@ -7,25 +7,28 @@ import { getBasePath } from "../utils/basePath";
 export default function Home() {
   const basePath = getBasePath();
   useEffect(() => {
-    // รอให้ SDK ถูกโหลดเสร็จแล้วทำการ initialize
-    if (typeof window !== 'undefined' && window.liff) {
-      window.liff.init({ liffId: "2006968919-ArYdqmNG" })
-        .then((result) => {
-          if (window.liff.isLoggedIn()) {
-            window.liff.getProfile().then(profile => {
-              console.log('profile', profile);
-              // const url = '?user_id=' + profile.userId;
-              // window.location = url;
-            }).catch((err) => {
-              console.log('error', err);
-            });
-          } else {
-            window.liff.login();
-          }
+    if (typeof window !== "undefined") {
+      // โหลด LIFF SDK
+      import("https://static.line-scdn.net/liff/edge/versions/2.8.0/sdk.js")
+        .then(() => {
+          console.log("LIFF SDK Loaded");
+          window.liff
+            .init({ liffId: "YOUR_LIFF_ID" })
+            .then(() => {
+              console.log("LIFF Initialized");
+              if (window.liff.isLoggedIn()) {
+                window.liff.getProfile().then(profile => {
+                  console.log("User ID:", profile.userId);
+                  // Redirect ไปยังหน้าที่ต้องการ
+                  window.location.href = `/?user_id=${profile.userId}`;
+                });
+              } else {
+                window.liff.login();
+              }
+            })
+            .catch(err => console.error("LIFF Init Error:", err));
         })
-        .catch((err) => {
-          console.log('error', err);
-        });
+        .catch(err => console.error("LIFF SDK Load Error:", err));
     }
   }, []);
 
