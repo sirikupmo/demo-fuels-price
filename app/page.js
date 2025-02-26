@@ -23,12 +23,20 @@ export default function Home() {
   useEffect(() => {
     const initLiff = async () => {
       try {
-        await liff.init({ liffId: "2006968919-ArYdqmNG" });
-        if (liff.isLoggedIn()) {
-          const profile = await liff.getProfile();
-          setUserProfile(profile);
+        if (process.env.NODE_ENV === "production") {
+          await liff.init({ liffId: "2006968919-ArYdqmNG" });
+          if (liff.isLoggedIn()) {
+            const profile = await liff.getProfile();
+            setUserProfile(profile);
+          } else {
+            liff.login();
+          }
         } else {
-          liff.login();
+          setUserProfile({
+            displayName: "Guest",
+            pictureUrl: `${basePath}/globe.svg`,
+            statusMessage: "Hello, World!",
+          });
         }
       } catch (err) {
         setError(err.message);
@@ -136,17 +144,20 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                {oilPrices.map((item) => (
-                  <tr key={item.priceDate}>
-                    <td className="border px-4 py-2">{new Date(item.priceDate).toLocaleDateString()}</td>
-                    {item.priceData.map((price, index) => (
-                      <tr key={index}>
-                        <td className="border px-4 py-2">{price.OilTypeId}</td>
-                        <td className="border px-4 py-2">{price.Price}</td>
-                      </tr>
-                    ))}
-                  </tr>
-                ))}
+                {oilPrices.map((item) =>
+                  item.priceData.map((price, index) => (
+                    <tr key={`${item.priceDate}-${index}`}>
+                      {/* แสดงวันที่แค่แถวแรกของแต่ละกลุ่ม */}
+                      {index === 0 && (
+                        <td rowSpan={item.priceData.length} className="border px-4 py-2">
+                          {new Date(item.priceDate).toLocaleDateString()}
+                        </td>
+                      )}
+                      <td className="border px-4 py-2">{price.OilTypeId}</td>
+                      <td className="border px-4 py-2">{price.Price}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           )}
