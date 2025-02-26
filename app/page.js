@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect } from 'react';
+import { useEffect, useState } from "react";
 import { getBasePath } from "../utils/basePath";
-import { useSearchParams } from "next/navigation";
 
 export default function Home() {
   const basePath = getBasePath();
