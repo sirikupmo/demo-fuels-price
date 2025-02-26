@@ -3,34 +3,43 @@
 import Image from "next/image";
 import { useEffect } from 'react';
 import { getBasePath } from "../utils/basePath";
+import { useSearchParams } from "next/navigation";
 
 export default function Home() {
   const basePath = getBasePath();
+  const searchParams = useSearchParams();
+  const [userId, setUserId] = useState(null);
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      // โหลด LIFF SDK
-      import("https://static.line-scdn.net/liff/edge/versions/2.8.0/sdk.js")
-        .then(() => {
-          console.log("LIFF SDK Loaded");
-          window.liff
-            .init({ liffId: "YOUR_LIFF_ID" })
-            .then(() => {
-              console.log("LIFF Initialized");
-              if (window.liff.isLoggedIn()) {
-                window.liff.getProfile().then(profile => {
-                  console.log("User ID:", profile.userId);
-                  // Redirect ไปยังหน้าที่ต้องการ
-                  window.location.href = `/?user_id=${profile.userId}`;
-                });
-              } else {
-                window.liff.login();
-              }
-            })
-            .catch(err => console.error("LIFF Init Error:", err));
-        })
-        .catch(err => console.error("LIFF SDK Load Error:", err));
+    const id = searchParams.get("user_id"); // ดึง user_id จาก URL
+    if (id) {
+      setUserId(id);
+    } else {
+      if (typeof window !== "undefined") {
+        // โหลด LIFF SDK
+        import("https://static.line-scdn.net/liff/edge/versions/2.8.0/sdk.js")
+          .then(() => {
+            console.log("LIFF SDK Loaded");
+            window.liff
+              .init({ liffId: "YOUR_LIFF_ID" })
+              .then(() => {
+                console.log("LIFF Initialized");
+                if (window.liff.isLoggedIn()) {
+                  window.liff.getProfile().then(profile => {
+                    console.log("User ID:", profile.userId);
+                    // Redirect ไปยังหน้าที่ต้องการ
+                    window.location.href = `/?user_id=${profile.userId}`;
+                  });
+                } else {
+                  window.liff.login();
+                }
+              })
+              .catch(err => console.error("LIFF Init Error:", err));
+          })
+          .catch(err => console.error("LIFF SDK Load Error:", err));
+      }
     }
-  }, []);
+
+  }, [searchParams]);
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
