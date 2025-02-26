@@ -1,6 +1,6 @@
 export const fetchOilPrices = async () => {
     try {
-        const response = await fetch("https://us-central1-my-project-dev-a68cb.cloudfunctions.net/demo_fuels_price", {
+        const response = await fetch("https://us-central1-my-project-dev-a68cb.cloudfunctions.net/demo_fuels_price/oilprices", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
