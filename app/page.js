@@ -3,6 +3,29 @@ import { getBasePath } from "../utils/basePath";
 
 export default function Home() {
   const basePath = getBasePath();
+  useEffect(() => {
+    // รอให้ SDK ถูกโหลดเสร็จแล้วทำการ initialize
+    if (typeof window !== 'undefined' && window.liff) {
+      window.liff.init({ liffId: "YOUR_LIFF_ID_HERE" })
+        .then((result) => {
+          if (window.liff.isLoggedIn()) {
+            window.liff.getProfile().then(profile => {
+              console.log('profile', profile);
+              // const url = '?user_id=' + profile.userId;
+              // window.location = url;
+            }).catch((err) => {
+              console.log('error', err);
+            });
+          } else {
+            window.liff.login();
+          }
+        })
+        .catch((err) => {
+          console.log('error', err);
+        });
+    }
+  }, []);
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
