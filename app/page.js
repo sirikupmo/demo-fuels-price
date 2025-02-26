@@ -11,11 +11,12 @@ export default function Home() {
   const [userProfile, setUserProfile] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [oilPrices, setOilPrices] = useState([]);
 
   const handleFetchData = async () => {
     setLoading(true);
     const data = await fetchOilPrices();
-    console.log("📢 API Response on Button Click:", data);
+    setOilPrices(data);
     setLoading(false);
   };
 
@@ -108,20 +109,47 @@ export default function Home() {
           <a
             href="#"
             onClick={(e) => {
-              e.preventDefault(); 
+              e.preventDefault();
               handleFetchData();
             }}
             className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
           >
             <Image
               className="dark:invert"
-              src={`${basePath}/vercel.svg`}
+              src={`${basePath}/graph-new-svgrepo-com.svg`}
               alt="Vercel logomark"
               width={20}
               height={20}
             />
             {loading ? "กำลังโหลด..." : "เรียก API"}
           </a>
+        </div>
+        <div className="flex gap-4 items-center flex-col sm:flex-row">
+          {/* แสดงตารางเมื่อมีข้อมูล */}
+          {oilPrices.length > 0 && (
+            <table className="min-w-full table-auto mt-8 border-collapse border border-gray-300">
+              <thead>
+                <tr>
+                  <th className="border px-4 py-2">วันที่</th>
+                  <th className="border px-4 py-2">ประเภทน้ำมัน</th>
+                  <th className="border px-4 py-2">ราคา</th>
+                </tr>
+              </thead>
+              <tbody>
+                {oilPrices.map((item) => (
+                  <tr key={item.priceDate}>
+                    <td className="border px-4 py-2">{new Date(item.priceDate).toLocaleDateString()}</td>
+                    {item.priceData.map((price, index) => (
+                      <tr key={index}>
+                        <td className="border px-4 py-2">{price.OilTypeId}</td>
+                        <td className="border px-4 py-2">{price.Price}</td>
+                      </tr>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
