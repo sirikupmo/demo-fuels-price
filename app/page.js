@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect } from 'react';
 import Image from "next/image";
 import { useEffect } from 'react';
 import { getBasePath } from "../utils/basePath";
