@@ -15,8 +15,8 @@ export default function Home() {
 
   const handleFetchData = async () => {
     setLoading(true);
-    const data = await fetchOilPrices();
-    setOilPrices(data);
+    const responseAPI = await fetchOilPrices();
+    setOilPrices(responseAPI.data);
     setLoading(false);
   };
 
@@ -112,7 +112,7 @@ export default function Home() {
               e.preventDefault();
               handleFetchData();
             }}
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
           >
             <Image
               className="dark:invert"
