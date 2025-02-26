@@ -7,26 +7,26 @@ import { getBasePath } from "../utils/basePath";
 export default function Home() {
   const basePath = getBasePath();
   useEffect(() => {
-    liff.init({
-      liffId: "2006968919-ArYdqmNG"
-    })
-      .then((result) => {
-        if (liff.isLoggedIn()) {
-          liff.getProfile().then(profile => {
-            // var url = '?user_id=' + profile.userId;
-            // window.location = url;
-            console.log('profile', profile);
-          })
-            .catch((err) => {
+    // รอให้ SDK ถูกโหลดเสร็จแล้วทำการ initialize
+    if (typeof window !== 'undefined' && window.liff) {
+      window.liff.init({ liffId: "2006968919-ArYdqmNG" })
+        .then((result) => {
+          if (window.liff.isLoggedIn()) {
+            window.liff.getProfile().then(profile => {
+              console.log('profile', profile);
+              // const url = '?user_id=' + profile.userId;
+              // window.location = url;
+            }).catch((err) => {
               console.log('error', err);
             });
-        } else {
-          liff.login();
-        }
-      })
-      .catch((err) => {
-        console.log('error', err);
-      });
+          } else {
+            window.liff.login();
+          }
+        })
+        .catch((err) => {
+          console.log('error', err);
+        });
+    }
   }, []);
 
   return (
