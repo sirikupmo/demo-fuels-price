@@ -10,6 +10,14 @@ export default function Home() {
   const basePath = getBasePath();
   const [userProfile, setUserProfile] = useState(null);
   const [error, setError] = useState(null);
+
+  const handleFetchData = async () => {
+    setLoading(true);
+    const data = await fetchOilPrices();
+    console.log("📢 API Response on Button Click:", data);
+    setLoading(false);
+  };
+
   useEffect(() => {
     const initLiff = async () => {
       try {
@@ -27,7 +35,6 @@ export default function Home() {
 
     if (typeof window !== "undefined") {
       initLiff();
-      fetchOilPrices();
     }
   }, []);
 
@@ -97,6 +104,17 @@ export default function Home() {
           >
             Read our docs
           </a>
+        </div>
+        <div className="flex flex-col items-center justify-center min-h-screen p-8">
+          <h1 className="text-2xl font-bold mb-4">กดปุ่มเพื่อเรียก API</h1>
+
+          <button
+            onClick={handleFetchData}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition disabled:bg-gray-400"
+            disabled={loading}
+          >
+            {loading ? "กำลังโหลด..." : "เรียก API"}
+          </button>
         </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">

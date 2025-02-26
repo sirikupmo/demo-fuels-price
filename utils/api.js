@@ -1,28 +1,16 @@
 export const fetchOilPrices = async () => {
     try {
-      const response = await fetch("/api/proxy", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        },
-        body: new URLSearchParams({
-          action: "fetch_oil_prices",
-          province: "กรุงเทพมหานคร",
-          month: "2",
-          year: "2568",
-        }),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
-      const data = await response.json();
-      console.log("📢 API Response:", data);
-      return data;
+        const response = await fetch("https://us-central1-fir-fuels-price.cloudfunctions.net/app/oilprice");
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("📢 API Response:", data);
+        return data;
     } catch (error) {
-      console.error("❌ API Error:", error);
-      return null;
+        console.error("❌ API Error:", error);
+        return null;
     }
-  };
-  
+};
