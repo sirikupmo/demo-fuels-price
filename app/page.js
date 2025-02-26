@@ -10,6 +10,7 @@ export default function Home() {
   const basePath = getBasePath();
   const [userProfile, setUserProfile] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFetchData = async () => {
     setLoading(true);
