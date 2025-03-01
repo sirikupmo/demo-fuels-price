@@ -21,15 +21,15 @@ export const fetchOilPrices = async () => {
         });
 
         if (response.ok) {
-            const data = await response.json();
-            console.log("API Response:", data);
-            return data;
+            const responseJson = await response.json();
+            console.log("API Response:", responseJson);
+            return responseJson.data;
         } else {
             console.error("API Error:", response.statusText);
             return null;
         }
     } catch (error) {
-        console.error("API Error:", error);
+        console.error("fetchOilPrices Error:", error);
         return null;
     }
 };

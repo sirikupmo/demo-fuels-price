@@ -15,8 +15,7 @@ export default function Home() {
 
   const handleFetchData = async () => {
     setLoading(true);
-    let responseAPI = await fetchOilPrices();
-    responseAPI = responseAPI || [];
+    const responseAPI = await fetchOilPrices();
     setOilPrices(responseAPI);
     setLoading(false);
   };
