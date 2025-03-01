@@ -1,3 +1,5 @@
+import liff from '@line/liff';
+
 const isProd = process.env.NODE_ENV === 'production';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -5,6 +7,10 @@ const nextConfig = {
   images: { unoptimized: true }, // ปิด Image Optimization
   assetPrefix: isProd ? '/demo-fuels-price/' : '',
   basePath: isProd ? '/demo-fuels-price' : '',
+  env: {
+    portDev: '5001',
+    liffId: '2006968919-ArYdqmNG',
+  },
 };
 
 export default nextConfig;

@@ -15,8 +15,9 @@ export default function Home() {
 
   const handleFetchData = async () => {
     setLoading(true);
-    const responseAPI = await fetchOilPrices();
-    setOilPrices(responseAPI.data);
+    let responseAPI = await fetchOilPrices();
+    responseAPI = responseAPI || [];
+    setOilPrices(responseAPI);
     setLoading(false);
   };
 
@@ -24,7 +25,7 @@ export default function Home() {
     const initLiff = async () => {
       try {
         if (process.env.NODE_ENV === "production") {
-          await liff.init({ liffId: "2006968919-ArYdqmNG" });
+          await liff.init({ liffId: process.env.liffId });
           if (liff.isLoggedIn()) {
             const profile = await liff.getProfile();
             setUserProfile(profile);
@@ -59,7 +60,7 @@ export default function Home() {
           height={38}
           priority
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
+        {/* <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2">
             Get started by editing{" "}
             <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
@@ -68,7 +69,7 @@ export default function Home() {
             .
           </li>
           <li>Save and see your changes instantly.</li>
-        </ol>
+        </ol> */}
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <h1 className="text-2xl font-bold">Welcome to LINE LIFF</h1>
 
@@ -91,7 +92,7 @@ export default function Home() {
           )}
         </div>
         <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
+          {/* <a
             className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
             target="_blank"
@@ -105,15 +106,15 @@ export default function Home() {
               height={20}
             />
             Deploy now
-          </a>
-          <a
+          </a> */}
+          {/* <a
             className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
             href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
             target="_blank"
             rel="noopener noreferrer"
           >
             Read our docs
-          </a>
+          </a> */}
           <a
             href="#"
             onClick={(e) => {
@@ -124,10 +125,10 @@ export default function Home() {
           >
             <Image
               className="dark:invert"
-              src={`${basePath}/graph-new-svgrepo-com.svg`}
+              src={`${basePath}/api.svg`}
               alt="Vercel logomark"
-              width={20}
-              height={20}
+              width={40}
+              height={40}
             />
             {loading ? "กำลังโหลด..." : "เรียก API"}
           </a>

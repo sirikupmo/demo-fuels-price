@@ -1,6 +1,14 @@
 export const fetchOilPrices = async () => {
     try {
-        const response = await fetch("https://us-central1-my-project-dev-a68cb.cloudfunctions.net/demo_fuels_price/oilprices", {
+        let url;
+        // url = "https://us-central1-my-project-dev-a68cb.cloudfunctions.net/demo_fuels_price/oilprices";
+        if (process.env.NODE_ENV === "production") {
+            url = "https://us-central1-my-project-dev-a68cb.cloudfunctions.net/demo_fuels_price/oilprices";
+        } else {
+            url = `http://localhost:${process.env.portDev}/oilprices`;
+        }
+
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -12,16 +20,16 @@ export const fetchOilPrices = async () => {
             }),
         });
 
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.ok) {
+            const data = await response.json();
+            console.log("API Response:", data);
+            return data;
+        } else {
+            console.error("API Error:", response.statusText);
+            return null;
         }
-
-        const data = await response.json();
-        console.log("📢 API Response:", data);
-        return data;
     } catch (error) {
-        console.error("❌ API Error:", error);
+        console.error("API Error:", error);
         return null;
     }
 };
